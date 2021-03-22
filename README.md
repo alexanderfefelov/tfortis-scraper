@@ -4,18 +4,24 @@
 
 TFortis Scraper is a tool to scrape viable data from TFortis switches.
 
-TFortis Scraper is capable to show:
+TFortis Scraper is capable to export
 
-- ARP table,
-- device information,
-- port MAC table,
-- port PoE status,
-- port statistics,
-- VLANs.
+- ARP table
+- device information
+- port MAC table
+- port PoE status
+- port statistics
+- VLANs
+
+in any of the formats
+
+- JSON
+- Python
+- YAML
 
 ## Why
 
-We need this because the very poor TFortis' SNMP implementation.
+We need this because of the very poor TFortis' SNMP implementation.
 
 ## Where
 
@@ -33,11 +39,19 @@ Install prerequisites:
 pip3 install --requirement requirements.txt
 ```
 
-Run:
+Run
 
 ```bash
 scraper.py --help
 ```
+
+to list available commands, or
+
+```bash
+scraper.py COMMAND --help
+```
+
+to get help for `COMMAND`.
 
 Examples:
 
