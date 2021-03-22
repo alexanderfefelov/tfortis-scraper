@@ -7,7 +7,8 @@ TFortis Scraper is a tool to scrape viable data from TFortis switches.
 TFortis Scraper is capable to show:
 
 - device information,
-- PoE status,
+- port MAC table,
+- port PoE status,
 - port statistics,
 - VLANs.
 
@@ -57,7 +58,7 @@ Examples:
 }
 ```
 
-`scraper.py get-poe-status --host 10.200.199.198 --username admin --password admin --port 0 --output-format json | jq`:
+`scraper.py get-port-poe-status --host 10.200.199.198 --username admin --password admin --port 0 --output-format json | jq`:
 
 ```json
 {
