@@ -21,7 +21,7 @@ def cli():
 @click.option('--password', required=True)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_device_info(host, username, password, output_format):
-    url = 'http://%s/info/cpuinfo.shtml' % host
+    url = URL_DEVICE_INFO % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
     html = response.text
     table_body = re.findall(REGEXP_DEVICE_INFO, html)[0]
@@ -35,7 +35,7 @@ def get_device_info(host, username, password, output_format):
 @click.option('--password', required=True)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_arp_table(host, username, password, output_format):
-    url = 'http://%s/info/ARP.shtml' % host
+    url = URL_ARP_TABLE % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
     html = response.text
     table_body = re.findall(REGEXP_ARP_TABLE, html)[0]
@@ -50,10 +50,10 @@ def get_arp_table(host, username, password, output_format):
 @click.option('--port', required=True)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_mac_table(host, username, password, port, output_format):
-    url = 'http://%s/info/MAC.shtml' % host
+    url = URL_PORT_MAC_TABLE % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
     html = response.text
-    table_body = re.findall(REGEXP_MAC_TABLE, html)[1]
+    table_body = re.findall(REGEXP_PORT_MAC_TABLE, html)[1]
     result = _process_mac_table(table_body[1:], port)
     _print_result(result, output_format)
 
@@ -64,7 +64,7 @@ def get_port_mac_table(host, username, password, port, output_format):
 @click.option('--password', required=True)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_vlans(host, username, password, output_format):
-    url = 'http://%s/vlan/VLAN_8021q.shtml' % host
+    url = URL_VLANS % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
     html = response.text
     table_body = re.findall(REGEXP_VLANS, html)[0]
@@ -79,7 +79,7 @@ def get_vlans(host, username, password, output_format):
 @click.option('--port', required=True, type=int)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_statistics(host, username, password, port, output_format):
-    url = 'http://%s/info/port_info.shtml?port=%d' % (host, port)
+    url = URL_PORT_STATISTICS % (host, port)
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
     html = response.text
     table_body = re.findall(REGEXP_PORT_STATISTICS, html)[0]
@@ -94,10 +94,10 @@ def get_port_statistics(host, username, password, port, output_format):
 @click.option('--port', required=True, type=int)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_poe_status(host, username, password, port, output_format):
-    url = 'http://%s/info/port_info.shtml?port=%d' % (host, port)
+    url = URL_PORT_POE_STATUS % (host, port)
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
     html = response.text
-    table_body = re.findall(REGEXP_POE_STATUS, html)[0]
+    table_body = re.findall(REGEXP_PORT_POE_STATUS, html)[0]
     result = _process_poe_status(table_body[1:])
     _print_result(result, output_format)
 
@@ -196,12 +196,20 @@ def _abort(message):
 
 REGEXP_ARP_TABLE = r'<table.*?>(.*?)</table>'
 REGEXP_DEVICE_INFO = r'<table.*?>(.*?)</table>'
-REGEXP_MAC_TABLE = r'<table.*?>(.*?)</table>'
-REGEXP_VLANS = r'<b>VLAN List</b><br><table.*?>(.*?)</table>'
+REGEXP_PORT_MAC_TABLE = r'<table.*?>(.*?)</table>'
+REGEXP_PORT_POE_STATUS = r'<b>PoE Status</b><table.*?>(.*?)</table>'
 REGEXP_PORT_STATISTICS = r'<b>Port Statistics</b><table.*?>(.*?)</table>'
-REGEXP_POE_STATUS = r'<b>PoE Status</b><table.*?>(.*?)</table>'
+REGEXP_VLANS = r'<b>VLAN List</b><br><table.*?>(.*?)</table>'
+
 REGEXP_TR = r'<tr.*?>(.*?)</tr>'
 REGEXP_TD = r'<td.*?>(.*?)</td>'
+
+URL_ARP_TABLE = 'http://%s/info/ARP.shtml'
+URL_DEVICE_INFO = 'http://%s/info/cpuinfo.shtml'
+URL_PORT_MAC_TABLE = 'http://%s/info/MAC.shtml'
+URL_PORT_POE_STATUS = 'http://%s/info/port_info.shtml?port=%d'
+URL_PORT_STATISTICS = 'http://%s/info/port_info.shtml?port=%d'
+URL_VLANS = 'http://%s/vlan/VLAN_8021q.shtml'
 
 
 if __name__ == '__main__':
