@@ -7,6 +7,7 @@ import re
 import requests
 from requests.auth import HTTPDigestAuth
 import sys
+import yaml
 
 
 @click.group()
@@ -18,7 +19,7 @@ def cli():
 @click.option('--host', required=True)
 @click.option('--username', required=True)
 @click.option('--password', required=True)
-@click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
+@click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_device_info(host, username, password, output_format):
     url = 'http://%s/info/cpuinfo.shtml' % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
@@ -32,7 +33,7 @@ def get_device_info(host, username, password, output_format):
 @click.option('--host', required=True)
 @click.option('--username', required=True)
 @click.option('--password', required=True)
-@click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
+@click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_arp_table(host, username, password, output_format):
     url = 'http://%s/info/ARP.shtml' % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
@@ -47,7 +48,7 @@ def get_arp_table(host, username, password, output_format):
 @click.option('--username', required=True)
 @click.option('--password', required=True)
 @click.option('--port', required=True, type=int, help='Use -1 for CPU')
-@click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
+@click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_mac_table(host, username, password, port, output_format):
     url = 'http://%s/info/MAC.shtml' % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
@@ -61,7 +62,7 @@ def get_port_mac_table(host, username, password, port, output_format):
 @click.option('--host', required=True)
 @click.option('--username', required=True)
 @click.option('--password', required=True)
-@click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
+@click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_vlans(host, username, password, output_format):
     url = 'http://%s/vlan/VLAN_8021q.shtml' % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
@@ -76,7 +77,7 @@ def get_vlans(host, username, password, output_format):
 @click.option('--username', required=True)
 @click.option('--password', required=True)
 @click.option('--port', required=True, type=int)
-@click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
+@click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_statistics(host, username, password, port, output_format):
     url = 'http://%s/info/port_info.shtml?port=%d' % (host, port)
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
@@ -91,7 +92,7 @@ def get_port_statistics(host, username, password, port, output_format):
 @click.option('--username', required=True)
 @click.option('--password', required=True)
 @click.option('--port', required=True, type=int)
-@click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
+@click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_poe_status(host, username, password, port, output_format):
     url = 'http://%s/info/port_info.shtml?port=%d' % (host, port)
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
@@ -183,6 +184,8 @@ def _print_result(result, output_format):
         print(result)
     elif output_format == 'json':
         print(json.dumps(result))
+    elif output_format == 'yaml':
+        print(yaml.dump(result))
     else:
         abort('Unknown output format')
 
