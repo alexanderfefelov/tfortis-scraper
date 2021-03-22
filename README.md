@@ -65,12 +65,12 @@ Examples:
 {
   "type-a-state": "ON",
   "type-b-state": "OFF",
-  "type-a-voltage": "47.92 V",
-  "type-b-voltage": "",
-  "type-a-current": "51 mA",
-  "type-b-current": "",
-  "type-a-power": "2.401 W",
-  "type-b-power": ""
+  "type-a-voltage": 47.132,
+  "type-b-voltage": null,
+  "type-a-current": 48,
+  "type-b-current": null,
+  "type-a-power": 2.262,
+  "type-b-power": null
 }
 ```
 

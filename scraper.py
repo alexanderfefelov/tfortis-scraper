@@ -159,8 +159,8 @@ def _process_poe_status(table_body):
     result = {}
     for r in re.findall(REGEXP_TR, table_body):
         d = re.findall(REGEXP_TD, r)
-        result[_normalize_key_name('type a %s' % d[0])] = d[1]
-        result[_normalize_key_name('type b %s' % d[0])] = d[2]
+        result[_normalize_key_name('type a %s' % d[0])] = _normalize_poe_value(d[1])
+        result[_normalize_key_name('type b %s' % d[0])] = _normalize_poe_value(d[2])
     return result
 
 
@@ -169,6 +169,17 @@ def _normalize_key_name(s):
         .replace('  ', '-') \
         .replace(' ', '-') \
         .lower()
+
+
+def _normalize_poe_value(s):
+    if not s:
+        return None
+    else:
+        maybe_pair = s.split()
+        if len(maybe_pair) == 2:
+            return float(maybe_pair[0])
+        else:
+            return s
 
 
 def _to_int(s):
