@@ -6,6 +6,7 @@ TFortis Scraper is a tool to scrape viable data from TFortis switches.
 
 TFortis Scraper is capable to show:
 
+- ARP table,
 - device information,
 - port MAC table,
 - port PoE status,
