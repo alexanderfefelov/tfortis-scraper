@@ -6,9 +6,10 @@ TFortis Scraper is a tool to scrape viable data from TFortis switches.
 
 TFortis Scraper is capable to show:
 
-- VLANs,
+- device information,
 - PoE status,
-- port statistics.
+- port statistics,
+- VLANs.
 
 ## Why
 
@@ -37,6 +38,24 @@ scraper.py --help
 ```
 
 Examples:
+
+`scraper.py get-device-info --host 10.200.199.198 --username admin --password admin --output-format json | jq`:
+
+```json
+{
+  "device-type": "TFortis PSW-2G4F",
+  "cpu-id": "343534363432470c27001f",
+  "hw-version": "0",
+  "software-version": "00.02.07",
+  "bootloader-version": "01.00",
+  "mac": "C0:11:A6:00:05:47",
+  "switch-id": "0x95",
+  "poe-id": "0x1",
+  "spi-flash": "Spansion",
+  "heap-free": "104",
+  "hw-errors": "No"
+}
+```
 
 `scraper.py get-poe-status --host 10.200.199.198 --username admin --password admin --port 0 --output-format json | jq`:
 

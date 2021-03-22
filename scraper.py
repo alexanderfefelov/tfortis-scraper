@@ -19,6 +19,20 @@ def cli():
 @click.option('--username', required=True)
 @click.option('--password', required=True)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
+def get_device_info(host, username, password, output_format):
+    url = 'http://%s/info/cpuinfo.shtml' % host
+    response = requests.post(url, auth=HTTPDigestAuth(username, password))
+    html = response.text
+    table_body = re.findall(REGEXP_DEVICE_INFO, html)[0]
+    result = _process_device_info(table_body)
+    _print_result(result, output_format)
+
+
+@cli.command()
+@click.option('--host', required=True)
+@click.option('--username', required=True)
+@click.option('--password', required=True)
+@click.option('--output-format', required=True, type=click.Choice(['json', 'python']))
 def get_vlans(host, username, password, output_format):
     url = 'http://%s/vlan/VLAN_8021q.shtml' % host
     response = requests.post(url, auth=HTTPDigestAuth(username, password))
@@ -56,6 +70,14 @@ def get_poe_status(host, username, password, port, output_format):
     table_body = re.findall(REGEXP_POE_STATUS, html)[0]
     result = _process_poe_status(table_body[1:])
     _print_result(result, output_format)
+
+
+def _process_device_info(table_body):
+    result = {}
+    for r in re.findall(REGEXP_TR, table_body):
+        d = re.findall(REGEXP_TD, r)
+        result[_normalize_key_name(d[0])] = d[1]
+    return result
 
 
 def _process_vlans(table_body):
@@ -118,6 +140,7 @@ def _abort(message):
     sys.exit(1)
 
 
+REGEXP_DEVICE_INFO = r'<table.*?>(.*?)</table>'
 REGEXP_VLANS = r'<b>VLAN List</b><br><table.*?>(.*?)</table>'
 REGEXP_PORT_STATISTICS = r'<b>Port Statistics</b><table.*?>(.*?)</table>'
 REGEXP_POE_STATUS = r'<b>PoE Status</b><table.*?>(.*?)</table>'
