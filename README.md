@@ -135,8 +135,8 @@ Examples:
     "name": "v8",
     "enabled": true,
     "tagged-ports": [
-      5,
-      6
+      "5",
+      "6"
     ],
     "untagged-ports": []
   },
@@ -145,13 +145,13 @@ Examples:
     "name": "v76",
     "enabled": true,
     "tagged-ports": [
-      5,
-      6
+      "5",
+      "6"
     ],
     "untagged-ports": [
-      2,
-      3,
-      4
+      "2",
+      "3",
+      "4"
     ]
   },
   {
@@ -159,11 +159,11 @@ Examples:
     "name": "v3504",
     "enabled": true,
     "tagged-ports": [
-      5,
-      6
+      "5",
+      "6"
     ],
     "untagged-ports": [
-      1
+      "1"
     ]
   }
 ]

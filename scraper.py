@@ -141,8 +141,8 @@ def _process_vlans(table_body):
             'vid': int(d[0]),
             'name': d[2],
             'enabled': bool(d[1]),
-            'tagged-ports': [int(x) for x in d[3].split()],
-            'untagged-ports': [int(x) for x in d[4].split()]
+            'tagged-ports': d[3].split(),
+            'untagged-ports': d[4].split()
         })
     return result
 
