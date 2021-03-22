@@ -47,7 +47,7 @@ def get_arp_table(host, username, password, output_format):
 @click.option('--host', required=True)
 @click.option('--username', required=True)
 @click.option('--password', required=True)
-@click.option('--port', required=True, type=int, help='Use -1 for CPU')
+@click.option('--port', required=True)
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_mac_table(host, username, password, port, output_format):
     url = 'http://%s/info/MAC.shtml' % host
@@ -124,11 +124,10 @@ def _process_arp_table(table_body):
 
 
 def _process_mac_table(table_body, port):
-    port_str = 'CPU' if port == -1 else str(port)
     result = []
     for r in re.findall(REGEXP_TR, table_body):
         d = re.findall(REGEXP_TD, r)
-        if d[2].strip() == port_str:
+        if d[2].strip() == port:
             result.append(d[1])
     return result
 
