@@ -1,32 +1,53 @@
 #!/usr/bin/env python3
 
 
+import click
 import re
 import requests
 from requests.auth import HTTPDigestAuth
 import sys
 
 
-REGEXP_VLANS = r'<b>VLAN List</b><br><table.*?>(.*?)</table>'
-REGEXP_PORT_STATISTICS = r'<b>Port Statistics</b><table.*?>(.*?)</table>'
-REGEXP_POE_STATUS = r'<b>PoE Status</b><table.*?>(.*?)</table>'
-REGEXP_TR = r'<tr.*?>(.*?)</tr>'
-REGEXP_TD = r'<td.*?>(.*?)</td>'
+@click.group()
+def cli():
+    pass
 
 
-def process_vlans(host, username, password, regexp):
+@cli.command()
+@click.option('--host')
+@click.option('--username')
+@click.option('--password')
+def get_vlans(host, username, password):
    url = 'http://%s/vlan/VLAN_8021q.shtml' % host
    response = requests.post(url, auth=HTTPDigestAuth(username, password))
    html = response.text
-   table_body = re.findall(regexp, html)[0]
+   table_body = re.findall(REGEXP_VLANS, html)[0]
    _process_table_body_vlans(table_body[1:])
 
 
-def process_port_info(host, username, password, port, regexp):
+@cli.command()
+@click.option('--host')
+@click.option('--username')
+@click.option('--password')
+@click.option('--port', type=int)
+def get_port_statistics(host, username, password, port):
    url = 'http://%s/info/port_info.shtml?port=%d' % (host, port)
    response = requests.post(url, auth=HTTPDigestAuth(username, password))
    html = response.text
-   table_body = re.findall(regexp, html)[0]
+   table_body = re.findall(REGEXP_PORT_STATISTICS, html)[0]
+   _process_table_body_port_info(table_body[1:])
+
+
+@cli.command()
+@click.option('--host')
+@click.option('--username')
+@click.option('--password')
+@click.option('--port', type=int)
+def get_poe_status(host, username, password, port):
+   url = 'http://%s/info/port_info.shtml?port=%d' % (host, port)
+   response = requests.post(url, auth=HTTPDigestAuth(username, password))
+   html = response.text
+   table_body = re.findall(REGEXP_POE_STATUS, html)[0]
    _process_table_body_port_info(table_body[1:])
 
 
@@ -42,23 +63,17 @@ def _process_table_body_port_info(table_body):
         print(d[0], d[1], d[2])
 
 
-def abort(message):
+def _abort(message):
     print(message, file=sys.stderr)
     sys.exit(1)
 
 
+REGEXP_VLANS = r'<b>VLAN List</b><br><table.*?>(.*?)</table>'
+REGEXP_PORT_STATISTICS = r'<b>Port Statistics</b><table.*?>(.*?)</table>'
+REGEXP_POE_STATUS = r'<b>PoE Status</b><table.*?>(.*?)</table>'
+REGEXP_TR = r'<tr.*?>(.*?)</tr>'
+REGEXP_TD = r'<td.*?>(.*?)</td>'
+
+
 if __name__ == '__main__':
-    command = sys.argv[1]
-    host = sys.argv[2]
-    username = sys.argv[3]
-    password = sys.argv[4]
-    if command == 'show-vlans':
-        process_vlans(host, username, password, REGEXP_VLANS)
-    elif command == 'show-port-statistics':
-        port = int(sys.argv[5])
-        process_port_info(host, username, password, port, REGEXP_PORT_STATISTICS)
-    elif command == 'show-poe-status':
-        port = int(sys.argv[5])
-        process_port_info(host, username, password, port, REGEXP_POE_STATUS)
-    else:
-        abort('Unknown command')
+    cli()

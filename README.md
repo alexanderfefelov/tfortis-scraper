@@ -21,3 +21,9 @@ Scraper was tested with the following  models:
 - TFortis PSW-2G+
 - TFortis PSW-2G4F
 - TFortis PSW-2G6F+
+
+## How
+
+```bash
+scraper.py --help
+```
