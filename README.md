@@ -27,7 +27,7 @@ Scraper was tested with the following  models:
 
 ## How
 
-Install:
+Install prerequisites:
 
 ```bash
 pip3 install --requirement requirements.txt
@@ -168,3 +168,7 @@ Examples:
   }
 ]
 ```
+
+---
+
+Copyright (c) 2021 Alexander Fefelov, MIT license (see [LICENSE](LICENSE))
