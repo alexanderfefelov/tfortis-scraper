@@ -47,7 +47,7 @@ def get_arp_table(host, username, password, output_format):
 @click.option('--host', required=True)
 @click.option('--username', required=True)
 @click.option('--password', required=True)
-@click.option('--port', required=True)
+@click.option('--port', required=True, help='Port name')
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_mac_table(host, username, password, port, output_format):
     url = URL_PORT_MAC_TABLE % host
@@ -76,7 +76,7 @@ def get_vlans(host, username, password, output_format):
 @click.option('--host', required=True)
 @click.option('--username', required=True)
 @click.option('--password', required=True)
-@click.option('--port', required=True, type=int)
+@click.option('--port', required=True, type=int, help='Port number, zero-based')
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_statistics(host, username, password, port, output_format):
     url = URL_PORT_STATISTICS % (host, port)
@@ -91,7 +91,7 @@ def get_port_statistics(host, username, password, port, output_format):
 @click.option('--host', required=True)
 @click.option('--username', required=True)
 @click.option('--password', required=True)
-@click.option('--port', required=True, type=int)
+@click.option('--port', required=True, type=int, help='Port number, zero-based')
 @click.option('--output-format', required=True, type=click.Choice(['json', 'python', 'yaml']))
 def get_port_poe_status(host, username, password, port, output_format):
     url = URL_PORT_POE_STATUS % (host, port)
